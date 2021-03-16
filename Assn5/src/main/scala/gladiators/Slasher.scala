@@ -1,0 +1,5 @@
+package gladiators
+
+class Slasher {
+
+}
