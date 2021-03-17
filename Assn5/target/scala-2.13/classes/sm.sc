@@ -1,14 +1,14 @@
 import scala.collection.mutable.ArrayBuffer
 
+var arr: ArrayBuffer[Int] = ArrayBuffer[Int]()
+
 trait Instruction {
-  var arr: ArrayBuffer[Int] = ArrayBuffer[Int]()
-  def execute(reg: Int): Int
+  def execute()
 }
 
 class Push(val arg: Int) extends Instruction {
-  def execute(reg: Int) ={
+  def execute() ={
     arr += arg
-    reg
   }
 }
 
@@ -18,7 +18,10 @@ object Push {
 
 
 class Pop() extends Instruction {
-  def execute(reg: Int) = arr.remove(arr.size-1)
+  def execute() ={
+    if(arr.size == 0) throw new IllegalArgumentException
+    arr.remove(arr.size-1)
+  }
 }
 
 object Pop {
@@ -27,7 +30,7 @@ object Pop {
 
 
 class Top() extends Instruction {
-  def execute(reg: Int) = { arr(arr.size-1) }
+  def execute() = {print(arr(arr.size-1))  }
 }
 
 object Top {
@@ -37,10 +40,14 @@ object Top {
 
 
 class Sum() extends Instruction {
-  def execute(reg: Int) = {
-    reg + arr.last
-    Pop()
-    reg + arr.last
+  def execute() = {
+    if(arr.size == 0) throw new IllegalArgumentException
+
+    var value = arr(arr.size-1)
+    arr.remove(arr.size-1)
+    value = value + arr(arr.size-1)
+    arr.remove(arr.size-1)
+    arr += value
   }
 }
 
@@ -49,10 +56,13 @@ object Sum {
 }
 
 class Times() extends Instruction {
-  def execute(reg: Int) = {
-    reg * arr.last
-    Pop()
-    reg * arr.last
+  def execute() = {
+    if(arr.size == 0) throw new IllegalArgumentException
+
+    var value = arr(arr.size-1)
+    arr.remove(arr.size-1)
+    value = value * arr(arr.size-1)
+    arr += value
   }
 }
 
@@ -62,19 +72,21 @@ object Times {
 
 
 object StackMachine{
-  var register: Int = 0
   var program: List[Instruction] = List[Instruction]()
   def run() = {
-    for(i <- program)
-      register = i.execute(register)
-
+    for(i <- program){
+      i.execute()
+    }
   }
 }
 
 
-object TestStackMachine extends App{
-  StackMachine.program = List(Push(3), Push(4), Push(5), Sum(), Times(), Top())
-  StackMachine.run()
-  println(StackMachine.register)
-}
+
+StackMachine.program = List(Push(3), Push(4), Push(5), Sum(), Times(), Top())
+StackMachine.run()
+
+StackMachine.program = List(Push(10), Push(10), Times(), Push(20), Sum(), Top())
+StackMachine.run()
+
+
 

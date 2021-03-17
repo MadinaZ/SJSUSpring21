@@ -18,7 +18,10 @@ object Push {
 
 
 class Pop() extends Instruction {
-  def execute() = arr.remove(arr.size-1)
+  def execute() ={
+    if(arr.size == 0) throw new IllegalArgumentException
+    arr.remove(arr.size-1)
+  }
 }
 
 object Pop {
@@ -38,6 +41,8 @@ object Top {
 
 class Sum() extends Instruction {
   def execute() = {
+    if(arr.size == 0) throw new IllegalArgumentException
+
     var value = arr(arr.size-1)
     arr.remove(arr.size-1)
     value = value + arr(arr.size-1)
@@ -52,6 +57,8 @@ object Sum {
 
 class Times() extends Instruction {
   def execute() = {
+    if(arr.size == 0) throw new IllegalArgumentException
+
     var value = arr(arr.size-1)
     arr.remove(arr.size-1)
     value = value * arr(arr.size-1)
