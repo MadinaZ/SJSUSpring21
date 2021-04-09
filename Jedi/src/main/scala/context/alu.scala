@@ -13,8 +13,8 @@ object alu {
     case "less" => less(args)          // binary
     case "equals" => same(args)        // binary
     case "more" => more(args)          // binary
-//    case "unequals" => unequals(args)  // binary
-//    case "not" => not(args)            // unary
+    case "unequals" => unequals(args)  // binary
+    case "not" => not(args)            // unary
     // TBC
   }
 
@@ -49,9 +49,14 @@ object alu {
     Boole(args(0) == args(1))
   }
 
+  private def unequals(args: List[Value]): Value = {
+    if(args.size != 2) throw new TypeException("2 inputs required by <")
+    Boole(args(0) != args(1))
+  }
+
   private def not(args: List[Value]): Value = {
-    if(!args.isInstanceOf[Boole]) throw new TypeException("Should be Boole")
-    args(0).asInstanceOf[Boole]
+    if(!args.isInstanceOf[Boole]) throw new TypeException("Must be Boole")
+    !args(0).asInstanceOf[Boole]
   }
 
   private def mul(args: List[Value]): Value = {

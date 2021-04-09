@@ -26,6 +26,8 @@ object ValueTests1 extends App {
 //    println(Boole(true) && Boole(false) || !Boole.FALSE) // true
 //    println(Boole.TRUE || { print("eager "); Boole.FALSE }) // eager true
 
+
+
      println(Exact(4) + Chars("abc"))      // context.TypeException: Numeric operand required
      println(Inexact(9) / Inexact(0.0))    // context.IllegalValueException: Divide by 0!
   } catch {
