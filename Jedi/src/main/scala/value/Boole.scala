@@ -1,26 +1,35 @@
 package value
 
+import context.TypeException
 import expression.Literal
 
-case class Boole(value: Boolean) extends Literal {
-    def &&(other: Boole): Boole = Boole(this.value && other.value)
-    def ||(other: Boole): Boole = Boole(this.value || other.value)
-    def unary_!(): Boole = Boole(!value)
+ class Boole(val value: Boolean) extends Literal {
+    def &&(other: Value):Boole=
+      other match {
+      case other: Boole => Boole(this.value && other.value)
+      case  _ => throw new TypeException("Type Error")
+      }
 
-  override def toString = this.value.toString
+   def ||(other: Value):Boole =
+     other match {
+     case _ => throw new TypeException("Type Error")
+     case other: Boole => Boole(other.value || this.value)
+   }
+
+    def unary_! = Boole(!this.value)
+
+  override def toString = value.toString
   override def hashCode(): Int = super.hashCode()
 
   override def equals(other: Any): Boolean =
     other match {
-      case x: Boole => x.isInstanceOf[Boole] && x.value == this.value
+      case other: Boole => other.isInstanceOf[Boole] && other.value == this.value
       case _ => false
     }
 }
 
-//object Boole {
-//  def apply(bool: Boolean) = new Boole(bool)
-//  val FALSE: Boolean = false
-//  val TRUE: Boolean = true
-//}
-
-
+object Boole {
+  def apply(bool: Boolean): Boole = new Boole(bool)
+  val FALSE: Boole = Boole(false)
+  val TRUE: Boole = Boole(true)
+}

@@ -40,22 +40,22 @@ object alu {
 
   private def more(args: List[Value]): Value = {
     if(args.size != 2) throw new TypeException("2 inputs required by >")
-    if(!args(0).isInstanceOf[Ordered[Value]]) throw new TypeException("Inputs to < must be orderable")
+    if(!args(0).isInstanceOf[Ordered[Value]]) throw new TypeException("Inputs to > must be orderable")
     Boole(args(0).asInstanceOf[Ordered[Value]] > args(1))
   }
 
   private def same(args: List[Value]): Value = {
-    if(args.size != 2) throw new TypeException("2 inputs required by <")
+    if(args.size != 2) throw new TypeException("2 inputs required by same")
     Boole(args(0) == args(1))
   }
 
   private def unequals(args: List[Value]): Value = {
-    if(args.size != 2) throw new TypeException("2 inputs required by <")
+    if(args.size != 2) throw new TypeException("2 inputs required by unequals")
     Boole(args(0) != args(1))
   }
 
   private def not(args: List[Value]): Value = {
-    if(!args.isInstanceOf[Boole]) throw new TypeException("Must be Boole")
+    if(!args(0).isInstanceOf[Boole]) throw new TypeException("Must be Boole")
     !args(0).asInstanceOf[Boole]
   }
 
