@@ -71,17 +71,17 @@ class Jedi1Parsers extends RegexParsers {
 
   // product ::= term ~ (("*" | "/") ~ term)*
   def product: Parser[Expression] = term ~ rep(("*" | "/") ~ term) ^^{
-    case p ~ more => parseProduct(p, more)
+    case p ~ more => parseProducts(p, more)
   }
 
-  private def parseProduct(result: Expression, unseen: List[String ~ Expression]): Expression = {
+  private def parseProducts(result: Expression, unseen: List[String ~ Expression]): Expression = {
     def combiner(exp: Expression, next: String~Expression) =
       next match {
         case "*" ~ p => FunCall(Identifier("mul"), List(exp, p))
         case "/" ~ p => FunCall(Identifier("div"), List(exp, p))
       }
     if (unseen == Nil) result
-    else parseProduct(combiner(result, unseen.head), unseen.tail)
+    else parseProducts(combiner(result, unseen.head), unseen.tail)
   }
 
   def term: Parser[Expression]  = funCall | literal | "("~>expression<~")"

@@ -5,14 +5,14 @@ import context.{IllegalValueException, TypeException}
 case class Inexact(val value: Double) extends Numeric with Ordered[Value] {
   override def *(other: Value): Numeric =
     other match {
-      case x: Exact => Exact(this.value.toInt * x.value)
-      case x: Inexact => Inexact(this.value.toDouble * x.value)
+      case x: Exact => Inexact(this.value * x.value)
+      case x: Inexact => Inexact(this.value * x.value)
       case _ => throw new TypeException("Numeric operand required")
     }
 
   override def /(other: Value): Numeric =
     other match {
-      case x: Exact => Exact(this.value.toInt / x.value)
+      case x: Exact => Inexact(this.value.toDouble / x.value)
       case x: Inexact => {
         if(x.value == 0) throw new IllegalValueException("Divided by 0")
         Inexact(this.value / x.value)
@@ -22,14 +22,14 @@ case class Inexact(val value: Double) extends Numeric with Ordered[Value] {
 
   override def -(other: Value): Numeric =
     other match {
-      case x: Exact => Exact(this.value.toInt - x.value)
+      case x: Exact => Inexact(this.value - x.value)
       case x: Inexact => Inexact(this.value - x.value)
       case _ => throw new TypeException("Numeric operand required")
     }
 
   override def +(other: Value): Addable =
     other match {
-      case x: Exact => Inexact(this.value.toDouble + x.value)
+      case x: Exact => Inexact(this.value + x.value)
       case x: Inexact => Inexact(this.value + x.value)
       case _ => throw new TypeException("Numeric operand required")
     }

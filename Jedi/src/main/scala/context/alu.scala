@@ -3,6 +3,9 @@ package context
 import value._
 import expression._
 
+import scala.collection.IterableOnce.iterableOnceExtensionMethods
+import scala.collection.mutable.ArrayBuffer
+
 object alu {
 
   def execute(opcode: Identifier, args: List[Value]): Value = opcode.name match {
@@ -16,7 +19,40 @@ object alu {
     case "unequals" => unequals(args)  // binary
     case "not" => not(args)            // unary
     // TBC
+    case "write" => write(args)
+//    case "car" => car(args)
+    case "dereference" => dereference(args)
+    case "var" => makeVar(args)
+
+
+    case _ => throw new UndefinedException(opcode)
   }
+
+  def write(args: List[Value]): Value = { println(args.head); Notification.done }
+
+  def dereference(args: List[Value]) = {
+    if(args.isEmpty) throw new TypeException("Nothing to dereference")
+    args.head.asInstanceOf[Variable].value
+  }
+
+  def makeVar(args: List[Value]) = {
+    if (args.isEmpty) throw new TypeException("error")
+    new Variable(args.head)
+  }
+
+  //  def cons(args: List[Value]): Value = {new Pair(args, )}
+
+    private def car(args:List[Value]) = {
+      if(args.size > 1 || args.size < 1) throw new TypeException("only one argument please!")
+      if(args(0).isInstanceOf[Pair]) {
+        val Pair = args(0).asInstanceOf[Pair]
+        Pair.first
+      }
+      else
+      {
+        throw new TypeException("INPUT MUST BE A PAIR!")
+      }
+    }
 
   private def add(args: List[Value]): Value = {
 
