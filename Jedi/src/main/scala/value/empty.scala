@@ -1,6 +1,6 @@
 package value
 
-object empty {
+object empty extends Value {
   override def toString: String = "Nil"
 
 }
