@@ -3,9 +3,6 @@ package context
 import value._
 import expression._
 
-import scala.collection.IterableOnce.iterableOnceExtensionMethods
-import scala.collection.mutable.ArrayBuffer
-
 object alu {
 
   def execute(opcode: Identifier, args: List[Value]): Value = opcode.name match {
